@@ -1,4 +1,4 @@
-const api = "https://message-list.appspot.com";
+const api = "http://message-list.appspot.com";
 var page_token;
 var first_load = "/messages";
 
@@ -82,7 +82,7 @@ function timeDifference(current_date, input_date){
   var second = Math.floor(milli_sec / 1000);
   milli_sec -= second * 1000;
 
-  return (hour, minute, second);
+  return [hour, minute, second];
 }
 
 
@@ -92,41 +92,49 @@ function checkDate(){
 
   var todaysDate = new Date();
   var current_day = todaysDate.getDate();
-  var current_month = todaysDate.getMonth();
+  var current_month = todaysDate.getMonth()+1;
   var current_year = todaysDate.getFullYear();
   
-  var inputDate = "2018-01-08T11:36:23Z";
+  var inputDate = "2018-01-07T22:27:23Z";
   var input_day = parseInt(inputDate.slice(8,10));
   var input_month = parseInt(inputDate.slice(5,7));
   var input_year = parseInt(inputDate.slice(0,4));
 
   var current_date = current_year + "-" +(current_month+1)+ "-" +current_day + " " + todaysDate.getHours() + ":" +todaysDate.getMinutes()+ ":" +todaysDate.getSeconds(); 
   var message_input_date = inputDate.slice(0,10)+ " " +inputDate.slice(12,19);
-  var hour, minute, second;
+
+  var diff_time = timeDifference(current_date, message_input_date);
+  var hour = diff_time[0]
+  var minute = diff_time[1]
+  var second = diff_time[2]
 
 
-  // if (input_year == current_year) { // this year
-  //   if(input_month == current_month){ // this month
-  //     if (input_day == current_day){ // today
-  //       var hour, minute, second = timeDifference(current_date, message_input_date);
-
-
-  //     } else {
-  //       return (month[input_month-1]input_month + " " + input_day)
-  //     }
-  //   } else { // not this month
-  //     return (month[input_month-1]input_month + " " + input_day)
-  //   }
-  // } else { // nor this year
-  //     return (input_month + "/" + input_day + "/" + input_year) 
-  // }
-  hour, minute, second = timeDifference(current_date, message_input_date);
-  console.log(hour)
-  
+  if (input_year == current_year) { // this year
+    if(input_month == current_month){ // this month
+      if (input_day == current_day){ // today
+        if (hour > 0){
+          console.log("hour")
+          return (hour + " hours ago");
+        } else if (minute > 0){
+          console.log("minute")
+          console.log(hour)
+          return (minute + " minutes ago");
+        } else{
+          console.log("second")
+          return (second + " seconds ago");
+        }
+      } else {
+        return (month[input_month-1] + " " + input_day)
+      }
+    } else { // not this month
+      return (month[input_month-1] + " " + input_day)
+    }
+  } else { // nor this year
+      return (input_month + "/" + input_day + "/" + input_year) 
+  }
 }
 
-
-checkDate();
+console.log(checkDate());
 
 
 

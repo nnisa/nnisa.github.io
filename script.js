@@ -1,4 +1,4 @@
-const api = "http://message-list.appspot.com";
+const api = "https://message-list.appspot.com";
 var page_token;
 var first_load = "/messages";
 

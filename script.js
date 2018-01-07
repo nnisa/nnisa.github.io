@@ -3,10 +3,10 @@ var page_token;
 var first_load = "/messages";
 
 
-
 // window.onload = function() {
 //     document.getElementById('messages').className += " loaded";
 // }
+
 
 //loading JSON object based on the url, it loads the first object and changes the URL moving forward to new tokens
 function table(link){
@@ -15,6 +15,50 @@ function table(link){
         create_new_messages(message_object)
     })
 }
+
+
+//checking time difference for current date and given date
+function checkDate(inputDate){
+  var month = new Array();
+  month = ["January","February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  var todaysDate = new Date();
+  var current_day = todaysDate.getDate();
+  var current_month = todaysDate.getMonth()+1;
+  var current_year = todaysDate.getFullYear();
+  
+  // var inputDate = "2018-01-07T13:57:56Z";
+  var input_day = parseInt(inputDate.slice(8,10));
+  var input_month = parseInt(inputDate.slice(5,7));
+  var input_year = parseInt(inputDate.slice(0,4));
+  var input_hour = parseInt(inputDate.slice(11,13));
+  var input_minute = parseInt(inputDate.slice(14,16));
+  var input_second = parseInt(inputDate.slice(17,19));
+
+  var current_date = current_year + "-" +(current_month+1)+ "-" +current_day + " " + todaysDate.getHours() + ":" +todaysDate.getMinutes()+ ":" +todaysDate.getSeconds(); 
+  var message_input_date = inputDate.slice(0,10)+ " " +inputDate.slice(12,19);
+
+  if (input_year == current_year) { // this year
+    if(input_month == current_month){ // this month
+      if (input_day == current_day){ // today
+        if (input_hour > todaysDate.getHours()){
+          return ((input_hour - todaysDate.getHours()) + " hours ago");
+        } else if (input_minute > todaysDate.getMinutes()){
+          return ((input_minute - todaysDate.getMinutes()) + " minutes ago");
+        } else{
+          return ((input_second - todaysDate.getSeconds()) + " seconds ago");
+        }
+      } else {
+        return (month[input_month-1] + " " + input_day)
+      }
+    } else { // not this month
+      return (month[input_month-1] + " " + input_day)
+    }
+  } else { // nor this year
+      return (input_month + "/" + input_day + "/" + input_year) 
+  }
+}
+
 
 //creating individual messages based on JSON object 
 function create_new_messages(message_object){
@@ -26,8 +70,7 @@ function create_new_messages(message_object){
     var author_name = message_object.messages[i].author.name;
     var author_content = message_object.messages[i].content;
     var date_time = message_object.messages[i].updated;
-    var date = date_time.slice(0,10);
-    var time = date_time.slice(11,19);
+    var received = checkDate(date_time)
     // console.log(date_time);
     var id = message_object.messages[i].id;
     var messages_section = document.getElementById('messages')
@@ -43,7 +86,7 @@ function create_new_messages(message_object){
           `<td>`+
             `<div class = "content_section">`+
               `<p class = "author_name">${author_name}</p>`+
-              `<p class = "date">${date}</p>`+
+              `<p class = "date">${received}</p>`+
             `</div>`+
           `</td>`+
         `</tr>`+
@@ -53,8 +96,10 @@ function create_new_messages(message_object){
   }
 }
 
+
 //Printing out the first load of messages 
 table(first_load);
+
 
 //On scroll we will change the token value and add new messages to the list
 window.onscroll = function(ev) {
@@ -65,76 +110,6 @@ if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
     table(page_token);
     }
 };
-
-function timeDifference(current_date, input_date){
-  var current_date = new Date(current_date);
-  var input_date = new Date(input_date);
-  
-  var date_difference = input_date.getTime() - current_date.getTime();
-  var milli_sec = date_difference;
-  // getting hour
-  var hour = Math.floor(milli_sec / 1000 / 60 / 60);
-  milli_sec -=  hour * 1000 * 60 * 60;
-  //getting minutes
-  var minute = Math.floor(milli_sec / 1000 / 60);
-  milli_sec -= minute * 1000 * 60;
-  //getting second
-  var second = Math.floor(milli_sec / 1000);
-  milli_sec -= second * 1000;
-
-  return [hour, minute, second];
-}
-
-
-function checkDate(){
-  var month = new Array();
-  month = ["January","February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-  var todaysDate = new Date();
-  var current_day = todaysDate.getDate();
-  var current_month = todaysDate.getMonth()+1;
-  var current_year = todaysDate.getFullYear();
-  
-  var inputDate = "2018-01-07T22:27:23Z";
-  var input_day = parseInt(inputDate.slice(8,10));
-  var input_month = parseInt(inputDate.slice(5,7));
-  var input_year = parseInt(inputDate.slice(0,4));
-
-  var current_date = current_year + "-" +(current_month+1)+ "-" +current_day + " " + todaysDate.getHours() + ":" +todaysDate.getMinutes()+ ":" +todaysDate.getSeconds(); 
-  var message_input_date = inputDate.slice(0,10)+ " " +inputDate.slice(12,19);
-
-  var diff_time = timeDifference(current_date, message_input_date);
-  var hour = diff_time[0]
-  var minute = diff_time[1]
-  var second = diff_time[2]
-
-
-  if (input_year == current_year) { // this year
-    if(input_month == current_month){ // this month
-      if (input_day == current_day){ // today
-        if (hour > 0){
-          console.log("hour")
-          return (hour + " hours ago");
-        } else if (minute > 0){
-          console.log("minute")
-          console.log(hour)
-          return (minute + " minutes ago");
-        } else{
-          console.log("second")
-          return (second + " seconds ago");
-        }
-      } else {
-        return (month[input_month-1] + " " + input_day)
-      }
-    } else { // not this month
-      return (month[input_month-1] + " " + input_day)
-    }
-  } else { // nor this year
-      return (input_month + "/" + input_day + "/" + input_year) 
-  }
-}
-
-console.log(checkDate());
 
 
 

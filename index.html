@@ -131,7 +131,11 @@
   <script>
     if (navigator.msMaxTouchPoints) {
 
-      return;
+      $('#slider').addClass('ms-touch');
+
+      $('#slider').on('scroll', function() {
+        $('.slide-image').css('transform','translate3d(-' + (100-$(this).scrollLeft()/6) + 'px,0,0)');
+      });
     } else {
 
       var slider = {
@@ -214,7 +218,7 @@
           this.el.imgSlide.addClass('animate').css('transform', 'translate3d(-' + 100-this.index*50 + 'px,0,0)');
         }
       };
-      slider.init();
+      // slider.init();
     }
   </script>
 </body>

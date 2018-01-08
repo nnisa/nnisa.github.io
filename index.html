@@ -1,52 +1,117 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Scroll & Swipe</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" href="style.css">
-<link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<meta charset="UTF-8">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
+<title>Slider</title>
+
+<style type="text/css">
+	.page1{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background-color: red;
+	}
+	.page2{
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 100%;
+		width: 100vw;
+		height: 100vh;
+		background-color: yellow;
+	}
+</style>
+
+
 </head>
+
 <body>
-	<nav>
-		<div id="navigation_bar">
-			<table>
-			  <tr>
-			    <td>
-			    	<i class="material-icons">menu</i>
-			    </td>
-			    <td>
-			    	<p id = "nav_title">Messages</p>
-			    </td>
-			  </tr>
-			</table>
-		</div>
-	</nav>
-
-	<div id ="messages">
-	</div>
-<script src="script.js"></script>
+	<div id = "page1" ontouchstart = "p1HandleTouchStart(event)" ontouchmove = "p1HandleTouchMove(event)" ontouchend = "p1HandleTouchEnd(event)" class="page1"></div>
+	<div id = "page2" ontouchstart = "p2HandleTouchStart(event)" ontouchmove = "p2HandleTouchMove(event)" ontouchend = "p2HandleTouchEnd(event)"class ="page2"></div>
 </body>
-</html>
 
-<!-- 
-<div class = "notification_card">
-	<table>
-	  <tr>
-	    <td>
-	    	<div class = "image_border">
-	    		<img class = "profile_image" src="https://data.whicdn.com/images/109494492/original.jpg">
-	    	</div>
-	    </td>
-	    <td>
-	    	<div class = "content_section">
-		    	<p class = "author_name"> Henry</p>
-		    	<p class = "date"> 17 may 2017</p>
-	    	</div>
-	    </td>
-	  </tr>
-	</table>
-	<p class = "author_content"> Hello my name is Henry, hope you are doing fine!Hello my name is Henry, hope you are doing fine!Hello my name is Henry, hope you are doing fine!Hello my name is Henry, hope you are doing fine!</p>
-</div> -->
+<script type="text/javascript">
+	var p1 = document.getElementById('page1')
+	var p2 = document.getElementById('page2')
+	var startingX;
+
+	function p1HandleTouchStart(evt) {
+		startingX = evt.touches[0].clientX;
+	}
+
+	function p1HandleTouchMove(evt){
+		var touch = evt.touches[0];
+		var change = startingX - touch.clientX;
+
+		if (change < 0){
+			return;
+		}
+		p1.style.left = '-'+ change + 'px';
+		p2.style.display = 'block';
+		p2.style.left = (screen.width - change) + 'px';
+		evt.preventDefault();
+	}
+
+	function p1HandleTouchEnd(evt){
+		var change = startingX - evt.changedTouches[0].clientX;
+		var threshold = screen.width / 3;
+
+		if (change < threshold){
+			p1.style.left = 0;
+			p2.style.left = '100%';
+			p2.style.display = 'none';
+		} else {
+			p1.style.transition = 'all .3s';
+			p2.style.transition = 'all .3s';
+			p1.style.left = '-100%';
+			p2.style.left = 0;
+			p2.style.display = 'block';
+		}
+	}
+
+
+	function p2HandleTouchStart(evt) {
+		startingX = evt.touches[0].clientX;
+		p1.style.transition = '';
+		p2.style.transition = '';
+		p1.style.display = 'none';
+	};
+
+	function p2HandleTouchMove(evt){
+		var touch = evt.touches[0];
+		var change = touch.clientX - startingX;
+
+		if (change < 0){
+			return;
+		}
+
+		p1.style.display = 'block';
+		p1.style.left = (change - screen.width) + 'px';
+		p2.style.left = change + 'px';
+		evt.preventDefault();
+	}
+
+	function p2HandleTouchEnd(evt){
+		var change = evt.changedTouches[0].clientX - startingX;
+		var threshold = screen.width / 4;
+
+		if (change < threshold){
+			p1.style.left = '-100%';
+			p1.style.display = 'none';
+			p2.style.left = 0;
+		} else {
+			p1.style.transition = 'all .3s';
+			p2.style.transition = 'all .3s';
+			p1.style.left = '-100%';
+			p1.style.left = '0';
+			p2.style.left = '100%';
+		}
+	};
+
+</script>
+
+</html>

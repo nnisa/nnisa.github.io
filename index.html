@@ -100,16 +100,12 @@
     .ms-touch.slider {
       overflow-x: scroll;
       overflow-y: none;
-      
       -ms-overflow-style: none;
       /* Hides the scrollbar. */
-      
       -ms-scroll-chaining: none;
       /* Prevents Metro from swiping to the next tab or app. */
-      
       -ms-scroll-snap-type: mandatory;
       /* Forces a snap scroll behavior on your images. */
-      
       -ms-scroll-snap-points-x: snapInterval(0%, 100%);
       /* Defines the y and x intervals to snap to when scrolling. */
     }
@@ -135,11 +131,7 @@
   <script>
     if (navigator.msMaxTouchPoints) {
 
-      $('#slider').addClass('ms-touch');
-
-      $('#slider').on('scroll', function() {
-        $('.slide-image').css('transform','translate3d(-' + (100-$(this).scrollLeft()/6) + 'px,0,0)');
-      });
+      return;
     } else {
 
       var slider = {

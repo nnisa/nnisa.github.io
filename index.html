@@ -96,19 +96,6 @@
       height: 40%;
       background: linear-gradient(transparent, black);
     }
-
-    .ms-touch.slider {
-      overflow-x: scroll;
-      overflow-y: none;
-      -ms-overflow-style: none;
-      /* Hides the scrollbar. */
-      -ms-scroll-chaining: none;
-      /* Prevents Metro from swiping to the next tab or app. */
-      -ms-scroll-snap-type: mandatory;
-      /* Forces a snap scroll behavior on your images. */
-      -ms-scroll-snap-points-x: snapInterval(0%, 100%);
-      /* Defines the y and x intervals to snap to when scrolling. */
-    }
   </style>
 </head>
 
@@ -129,16 +116,11 @@
     </div>
   </div>
   <script>
-    if (navigator.msMaxTouchPoints) {
-
-      $('#slider').addClass('ms-touch');
-
-      $('#slider').on('scroll', function() {
-        $('.slide-image').css('transform','translate3d(-' + (100-$(this).scrollLeft()/6) + 'px,0,0)');
-      });
+    if (navigator.msMaxTouchPoints) { // checking if it is touch device or not 
+      console.log("Not a mobile device!")
     } else {
 
-      var slider = {
+      var div = {
 
         el: {
           slider: $("#slider"),
@@ -160,20 +142,21 @@
         bindUIEvents: function() {
 
           this.el.holder.on("touchstart", function(event) {
-            slider.start(event);
+            div.start(event);
           });
 
           this.el.holder.on("touchmove", function(event) {
-            slider.move(event);
+            div.move(event);
           });
 
           this.el.holder.on("touchend", function(event) {
-            slider.end(event);
+            div.end(event);
           });
 
         },
 
         start: function(event) {
+          console.log("start printed")
           // Test for flick.
           this.longTouch = false;
           setTimeout(function() {
@@ -188,6 +171,7 @@
         },
 
         move: function(event) {
+          console.log("move printed")
           // Continuously return touch position.
           this.touchmovex =  event.originalEvent.touches[0].pageX;
           // Calculate distance to translate holder.
@@ -203,6 +187,7 @@
         },
 
         end: function(event) {
+          console.log("end printed")
           // Calculate the distance swiped.
           var absMove = Math.abs(this.index*this.slideWidth - this.movex);
           // Calculate the index. All other calculations are based on the index.
@@ -218,7 +203,7 @@
           this.el.imgSlide.addClass('animate').css('transform', 'translate3d(-' + 100-this.index*50 + 'px,0,0)');
         }
       };
-      // slider.init();
+      div.init();
     }
   </script>
 </body>

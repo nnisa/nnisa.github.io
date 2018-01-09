@@ -75,24 +75,26 @@ function create_new_messages(message_object){
     var id = message_object.messages[i].id;
     var messages_section = document.getElementById('messages')
 
-    $(`<div id = ${id} class = "notification_card">`+
-      `<table>`+
-        `<tr>`+
-          `<td>`+
-            `<div class = "image_border">`+
-              `<img class = "profile_image" src= ${profile_image_url}>`+
-            `</div>`+
-          `</td>`+
-          `<td>`+
-            `<div class = "content_section">`+
-              `<p class = "author_name">${author_name}</p>`+
-              `<p class = "date">${received}</p>`+
-            `</div>`+
-          `</td>`+
-        `</tr>`+
-      `</table>`+
-      `<p class = "author_content">${author_content}</p>`+
-    `</div>`).appendTo($(messages_section));
+    $(`<div class = "card_wrapper">`+
+        `<div id = ${id} class = "notification_card">`+
+          `<table>`+
+            `<tr>`+
+              `<td>`+
+                `<div class = "image_border">`+
+                  `<img class = "profile_image" src= ${profile_image_url}>`+
+                `</div>`+
+              `</td>`+
+              `<td>`+
+                `<div class = "content_section">`+
+                  `<p class = "author_name">${author_name}</p>`+
+                  `<p class = "date">${received}</p>`+
+                `</div>`+
+              `</td>`+
+            `</tr>`+
+          `</table>`+
+          `<p class = "author_content">${author_content}</p>`+
+        `</div>`+
+      `</div>`).appendTo($(messages_section));
   }
 }
 
@@ -110,6 +112,131 @@ if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
     table(page_token);
     }
 };
+
+
+
+//Swipe gesture 
+
+if (navigator.msMaxTouchPoints) { // checking if it is touch device or not 
+      console.log("Not a mobile device!")
+    } else {
+
+      var div = {
+
+        el: {
+          messages: $("#messages"),
+          holder: $("#1"),
+          notification_card: $(".notification_card")
+        },
+
+        messagesWidth: $('#messages').width(),
+        touchstartx: undefined,
+        touchmovex: undefined,
+        movex: undefined,
+        index: 0,
+        longTouch: undefined,
+        
+        init: function() {
+          this.allEvents();
+        },
+
+        allEvents: function() {
+
+          this.el.holder.on("touchstart", function(event) {
+            div.start(event);
+          });
+
+          this.el.holder.on("touchmove", function(event) {
+            div.move(event);
+          });
+
+          this.el.holder.on("touchend", function(event) {
+            div.end(event);
+          });
+
+        },
+
+        start: function(event) {
+          console.log("start printed")
+          this.longTouch = false;
+          setTimeout(function() {
+            window.messages.longTouch = true;
+          }, 250);
+
+          // Get the original touch position.
+          this.touchstartx =  event.originalEvent.touches[0].pageX;
+
+          // The movement gets all janky if there's a transition on the elements.
+          $('.animate').removeClass('animate');
+        },
+
+        move: function(event) {
+          console.log("move printed")
+          // Continuously return touch position.
+          this.touchmovex =  event.originalEvent.touches[0].pageX;
+          // Calculate distance to translate holder.
+          this.movex = this.index*this.messagesWidth + (this.touchstartx - this.touchmovex);
+          // Defines the speed the images should move at.
+          var panx = 100-this.movex/6;
+          if (this.movex < 600) { // Makes the holder stop moving when there is no more content.
+            this.el.holder.css('transform','translate3d(-' + this.movex + 'px,0,0)');
+          }
+          if (panx < 100) { // Corrects an edge-case problem where the background image moves without the container moving.
+            this.el.notification_card.css('transform','translate3d(-' + panx + 'px,0,0)');
+          }
+        },
+
+        end: function(event) {
+          console.log("end printed")
+          // Calculate the distance swiped.
+          var absMove = Math.abs(this.index*this.messagesWidth - this.movex);
+          // Calculate the index. All other calculations are based on the index.
+          if (absMove > this.messagesWidth/2 || this.longTouch === false) {
+            if (this.movex > this.index*this.messagesWidth && this.index < 2) {
+              this.index++;
+            } else if (this.movex < this.index*this.messagesWidth && this.index > 0) {
+              this.index--;
+            }
+          }      
+          // Move and animate the elements.
+          this.el.holder.addClass('animate').css('transform', 'translate3d(-' + this.index*this.messagesWidth + 'px,0,0)');
+          this.el.notification_card.addClass('animate').css('transform', 'translate3d(-' + 100-this.index*50 + 'px,0,0)');
+        }
+      };
+      div.init();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

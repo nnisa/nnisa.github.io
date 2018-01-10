@@ -41,6 +41,7 @@ div#navigation_bar {
 
 div#messages {
     padding-top: 23%;
+    overflow-y:auto;
 }
 
 .newDiv{

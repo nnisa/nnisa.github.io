@@ -112,58 +112,84 @@ if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
 //SWIPE FUNCTION
 var id,
 card, // left position of moving box
-startx, // starting x coordinate of touch point
-dist = 0, // distance traveled by touch point
-touchobj = null // Touch object holder
+startX, // starting x coordinate of touch point
+dist = 0, 
+startY,// distance traveled by touch point
+threshold = ((document.getElementById('messages')).offsetWidth)/3,
+longTouch = false,
+allowedTime = 200, // maximum time allowed to travel that distance
+elapsedTime,
+startTime
+
+
+
+
+function swipedir(direction){
+  if (direction === 'left'){
+    console.log("Left Swipe")
+  } else if (direction === 'right'){
+    console.log("right Swipe")
+  } else if (direction === 'up'){
+    console.log("Scroll up")
+  } else if (direction === 'down'){
+    console.log("Scroll down")
+  }
+}
+
 
 $("#messages").on("touchstart", function(e) {
       e.preventDefault();
       id = $(e.target.closest(".notification_card")).attr('id');
       console.log(id);
-      
       card = document.getElementById(id),
 
-      touchobj = e.changedTouches[0] // reference first touch point
-      startx = parseInt(touchobj.clientX) // get x coord of touch point
+      console.log("touchstart initiated")
+      
+      startTime = new Date().getTime()
+      var touchobj = e.changedTouches[0] // reference first touch point
+      startX = parseInt(touchobj.clientX)
+      startY = parseInt(touchobj.clientY) // get Y coord of touch point
       e.preventDefault() // prevent default click behavior
-    });
+    }, false);
 
 
 $("#messages").on("touchmove", function(e) {
-      e.preventDefault();
-      var id = $(e.target.closest(".notification_card")).attr('id');
+      var touchobj = e.changedTouches[0]
+      distX = touchobj.pageX - startX // get horizontal dist traveled by finger while in contact with surface
+      distY = touchobj.pageY - startY // get vertical dist traveled by finger while in contact with surface
       
-      touchobj = e.changedTouches[0] // reference first touch point for this event
-      dist = parseInt(touchobj.clientX) - startx // calculate dist traveled by touch point
-      // move box according to starting pos plus dist
-
-      card.style.left = dist + 'px';
-      e.preventDefault()
+      if (distX > 0 && distY < distX){
+        touchobj = e.changedTouches[0] // reference first touch point for this event
+        dist = parseInt(touchobj.clientX) - startX // calculate dist traveled by touch point
+        // move box according to starting pos plus dist
+        e.preventDefault();
+        card.style.left = dist + 'px';
+        e.preventDefault()
+      }
     });
 
-// $("#messages").on("touchend", function(e) {
-//       e.preventDefault();
+$("#messages").on("touchend", function(e) {
+      e.preventDefault();
 
-//       touchobj = e.changedTouches[0] // reference first touch point for this event
-//       var dist = parseInt(touchobj.clientX) - startx // calculate dist traveled by touch point
-//       // move box according to starting pos plus dist
-//       // with lower limit 0 and upper limit 380 so it doesn't move outside track:
+      var touchobj = e.changedTouches[0]
+      distX = touchobj.pageX - startX // get horizontal dist traveled by finger while in contact with surface
+      distY = touchobj.pageY - startY // get vertical dist traveled by finger while in contact with surface
 
-//       var slideWidth = $('#track').width();
-//       var threshold = slideWidth/3;
+      elapsedTime = new Date().getTime() - startTime // get time elapsed
 
 
-//       if (dist < threshold && dist < 0 ){
-//           console.log('swipe right')
-//           box2.style.left = '140%';
-//       } else if (dist > threshold){
-//           console.log('swipe left')
-//           box2.style.left = '-140%';
-//       } else {
-//           box2.style.left = '0px';
-//       }  
+      if (elapsedTime <= allowedTime){ // first condition for awipe met
+          if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){ // 2nd condition for horizontal swipe met
+              swipedir = (distX < 0)? 'left' : 'right' // if dist traveled is negative, it indicates left swipe
+          }
+          else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){ // 2nd condition for vertical swipe met
+              swipedir = (distY < 0)? 'up' : 'down' // if dist traveled is negative, it indicates up swipe
+          }
+      }
 
-//     });
+      e.preventDefault()
+
+    });
 
 
 

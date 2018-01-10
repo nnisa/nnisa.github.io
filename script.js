@@ -124,7 +124,7 @@ startTime
 
 
 $("#messages").on("touchstart", function(e) {
-      e.preventDefault();
+      // e.preventDefault();
       var id = $(e.target.closest(".notification_card")).attr('id');
       console.log(id);
       card = document.getElementById(id)

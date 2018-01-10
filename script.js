@@ -67,7 +67,7 @@ function create_new_messages(message_object){
   var count = message_object.count;
   for(var i=0; i < count; i++) {
     //fetching all the important data required to create a message
-    var profile_image_url = "http://message-list.appspot.com/" + message_object.messages[i].author.photoUrl;
+    var profile_image_url = "https://message-list.appspot.com/" + message_object.messages[i].author.photoUrl;
     var author_name = message_object.messages[i].author.name;
     var author_content = message_object.messages[i].content;
     var date_time = message_object.messages[i].updated;
@@ -76,7 +76,7 @@ function create_new_messages(message_object){
     var id = message_object.messages[i].id;
     var messages_section = document.getElementById('messages')
 
-    $(`<div id = ${id} class = "notification_card">`+
+    $(`<div id = ${id} onClick ="reply_click(this.id)" class = "notification_card">`+
         `<table>`+
           `<tr>`+
             `<td>`+
@@ -110,8 +110,10 @@ if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
 };
 
 
-
-
+function reply_click(clicked_id){
+    alert(clicked_id);
+    console.log("running")
+}
 
 
 

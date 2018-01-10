@@ -125,8 +125,9 @@ startTime
 
 $("#messages").on("touchstart", function(e) {
       e.preventDefault();
+      var id = $(e.target.closest(".notification_card")).attr('id');
       console.log(id);
-      card = document.getElementById(id),
+      card = document.getElementById(id)
 
       startTime = new Date().getTime()
       var touchobj = e.changedTouches[0] // reference first touch point

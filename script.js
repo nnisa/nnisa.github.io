@@ -122,35 +122,17 @@ elapsedTime,
 startTime
 
 
-
-
-function swipedir(direction){
-  if (direction === 'left'){
-    console.log("Left Swipe")
-  } else if (direction === 'right'){
-    console.log("right Swipe")
-  } else if (direction === 'up'){
-    console.log("Scroll up")
-  } else if (direction === 'down'){
-    console.log("Scroll down")
-  }
-}
-
-
 $("#messages").on("touchstart", function(e) {
       e.preventDefault();
-      id = $(e.target.closest(".notification_card")).attr('id');
       console.log(id);
       card = document.getElementById(id),
 
-      console.log("touchstart initiated")
-      
       startTime = new Date().getTime()
       var touchobj = e.changedTouches[0] // reference first touch point
       startX = parseInt(touchobj.clientX)
       startY = parseInt(touchobj.clientY) // get Y coord of touch point
       e.preventDefault() // prevent default click behavior
-    }, false);
+    });
 
 
 $("#messages").on("touchmove", function(e) {
@@ -158,14 +140,17 @@ $("#messages").on("touchmove", function(e) {
       distX = touchobj.pageX - startX // get horizontal dist traveled by finger while in contact with surface
       distY = touchobj.pageY - startY // get vertical dist traveled by finger while in contact with surface
       
-      if (distX > 0 && distY < distX){
-        touchobj = e.changedTouches[0] // reference first touch point for this event
-        dist = parseInt(touchobj.clientX) - startX // calculate dist traveled by touch point
-        // move box according to starting pos plus dist
-        e.preventDefault();
-        card.style.left = dist + 'px';
-        e.preventDefault()
-      }
+      // if (distX > 0 && distY < distX){
+      //   touchobj = e.changedTouches[0] // reference first touch point for this event
+      //   dist = parseInt(touchobj.clientX) - startX // calculate dist traveled by touch point
+      //   // move box according to starting pos plus dist
+      //   e.preventDefault();
+      //   card.style.left = dist + 'px';
+      //   e.preventDefault()
+      //   console.log("swipe")
+      // } else {
+      //   console.log("scroll")
+      // }
     });
 
 $("#messages").on("touchend", function(e) {
@@ -180,10 +165,18 @@ $("#messages").on("touchend", function(e) {
 
       if (elapsedTime <= allowedTime){ // first condition for awipe met
           if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){ // 2nd condition for horizontal swipe met
-              swipedir = (distX < 0)? 'left' : 'right' // if dist traveled is negative, it indicates left swipe
+              if (distX < 0){
+                swipedir('left')
+              } else {
+                swipedir('right')
+              }
           }
           else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){ // 2nd condition for vertical swipe met
-              swipedir = (distY < 0)? 'up' : 'down' // if dist traveled is negative, it indicates up swipe
+              if (distY < 0){
+                swipedir('up')
+              } else {
+                swipedir('down')
+              }
           }
       }
 
@@ -191,7 +184,17 @@ $("#messages").on("touchend", function(e) {
 
     });
 
-
+  function swipedir(direction){
+    if (direction === 'left'){
+      console.log("Left Swipe")
+    } else if (direction === 'right'){
+      console.log("right Swipe")
+    } else if (direction === 'up'){
+      console.log("Scroll up")
+    } else if (direction === 'down'){
+      console.log("Scroll down")
+    }
+  }
 
 
 

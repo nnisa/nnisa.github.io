@@ -133,7 +133,7 @@ $("#messages").on("touchstart", function(e) {
       var touchobj = e.changedTouches[0] // reference first touch point
       startX = parseInt(touchobj.clientX)
       startY = parseInt(touchobj.clientY) // get Y coord of touch point
-      e.preventDefault() // prevent default click behavior
+      // e.preventDefault() // prevent default click behavior
     });
 
 
@@ -148,7 +148,7 @@ $("#messages").on("touchmove", function(e) {
         // move box according to starting pos plus dist
         e.preventDefault();
         card.style.left = dist + 'px';
-        e.preventDefault()
+        // e.preventDefault()
         console.log("swipe")
       } else {
         console.log("scroll")

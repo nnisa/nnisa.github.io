@@ -57,27 +57,25 @@ window.addEventListener('load', function(){
 
 
     box2.addEventListener('touchend', function(e){
-    touchobj = e.changedTouches[0] // reference first touch point for this event
-    var dist = parseInt(touchobj.clientX) - startx // calculate dist traveled by touch point
-    // move box according to starting pos plus dist
-    // with lower limit 0 and upper limit 380 so it doesn't move outside track:
-    console.log(dist)
+        touchobj = e.changedTouches[0] // reference first touch point for this event
+        var dist = parseInt(touchobj.clientX) - startx // calculate dist traveled by touch point
+        // move box according to starting pos plus dist
+        // with lower limit 0 and upper limit 380 so it doesn't move outside track:
 
-    var slideWidth = $('#track').width();
-    var threshold = slideWidth/2;
+        var slideWidth = $('#track').width();
+        var threshold = slideWidth/3;
 
-    console.log(threshold, dist)
 
-    if (dist < threshold){
-        //swipe right 
-        box2.style.left = '140%';
-    } else if (dist > threshold){
-        // swipe left 
-        box2.style.left = '-140%';
-    } 
-
-    
-    e.preventDefault()
+        if (dist < threshold && dist < 0 ){
+            console.log('swipe right')
+            box2.style.left = '140%';
+        } else if (dist > threshold){
+            console.log('swipe left')
+            box2.style.left = '-140%';
+        } else {
+            box2.style.left = '0px';
+        }    
+        e.preventDefault()
     }, false)
  
 }, false)

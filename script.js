@@ -152,6 +152,7 @@ $("#messages").on("touchmove", function(e) {
         console.log("swipe")
       } else {
         console.log("scroll")
+        $(window).scroll();
       }
     });
 
@@ -172,6 +173,8 @@ $("#messages").on("touchend", function(e) {
               } else {
                 swipedir('right')
               }
+              e.preventDefault()
+
           }
           else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){ // 2nd condition for vertical swipe met
               if (distY < 0){
@@ -181,8 +184,6 @@ $("#messages").on("touchend", function(e) {
               }
           }
       }
-      e.preventDefault()
-
     });
 
 
@@ -193,8 +194,10 @@ $("#messages").on("touchend", function(e) {
     } else if (direction === 'right'){
       console.log("right Swipe")
     } else if (direction === 'up'){
+      $(window).scroll();
       console.log("Scroll up")
     } else if (direction === 'down'){
+      $(window).scroll();
       console.log("Scroll down")
     }
   }

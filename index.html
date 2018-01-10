@@ -1,210 +1,69 @@
-<!doctype html>
-
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8">
+<title>Scroll & Swipe</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-  <title>The HTML5 Herald</title>
-  <meta name="description" content="The HTML5 Herald">
-  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
-
-  <style type="text/css">
-    @import url(https://fonts.googleapis.com/css?family=Josefin+Slab:100);
-    html,
-    body {
-      height: 100%;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
-
-    .slider-wrap {
-      width: 300px;
-      height: 500px;
-      position: absolute;
-      left: 50%;
-      margin-left: -150px;
-      top: 50%;
-      margin-top: -225px;
-    }
-
-    .slider {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    .holder {
-      width: 300%;
-      max-height: 500px;
-      height: 100%;
-      overflow-y: hidden;
-    }
-
-    .slide-wrapper {
-      width: 33.333%;
-      height: 100%;
-      float: left;
-      height: 500px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .slide {
-      height: 100%;
-      position: relative;
-    }
-
-    .temp {
-      position: absolute;
-      z-index: 1;
-      color: white;
-      font-size: 100px;
-      bottom: 15px;
-      left: 15px;
-      font-family: 'Josefin Slab', serif;
-      font-weight: 100;
-    }
-
-    .slide div {
-      width: 300px;
-      height: 500px;
-      z-index: 0;
-    }
-
-    .slide img {
-      position: absolute;
-      z-index: 0;
-      transform: translatex(-100px);
-    }
-
-    .animate {
-      transition: transform 0.3s ease-out;
-    }
-
-
-    .slide:before {
-      content: "";
-      position: absolute;
-      z-index: 1;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 40%;
-      background: linear-gradient(transparent, black);
-    }
-  </style>
 </head>
-
 <body>
-  <div class="slider-wrap">
-    <div class="slider" id="slider">
-      <div class="holder">
-        <div class="slide-wrapper">
-          <div class="slide"><img class="slide-image" src="https://farm8.staticflickr.com/7347/8731666710_34d07e709e_z.jpg" /></div>
-        </div>
-        <div class="slide-wrapper">
-          <div class="slide"><img class="slide-image" src="https://farm8.staticflickr.com/7384/8730654121_05bca33388_z.jpg" /></div>
-        </div>
-        <div class="slide-wrapper">
-          <div class="slide"><img class="slide-image" src="https://farm8.staticflickr.com/7382/8732044638_9337082fc6_z.jpg" /></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script>
-    if (navigator.msMaxTouchPoints) { // checking if it is touch device or not 
-      console.log("Not a mobile device!")
-    } else {
-
-      var div = {
-
-        el: {
-          slider: $("#slider"),
-          holder: $(".holder"),
-          imgSlide: $(".slide-image")
-        },
-
-        slideWidth: $('#slider').width(),
-        touchstartx: undefined,
-        touchmovex: undefined,
-        movex: undefined,
-        index: 0,
-        longTouch: undefined,
-        
-        init: function() {
-          this.bindUIEvents();
-        },
-
-        bindUIEvents: function() {
-
-          this.el.holder.on("touchstart", function(event) {
-            div.start(event);
-          });
-
-          this.el.holder.on("touchmove", function(event) {
-            div.move(event);
-          });
-
-          this.el.holder.on("touchend", function(event) {
-            div.end(event);
-          });
-
-        },
-
-        start: function(event) {
-          console.log("start printed")
-          // Test for flick.
-          this.longTouch = false;
-          setTimeout(function() {
-            window.slider.longTouch = true;
-          }, 250);
-
-          // Get the original touch position.
-          this.touchstartx =  event.originalEvent.touches[0].pageX;
-
-          // The movement gets all janky if there's a transition on the elements.
-          $('.animate').removeClass('animate');
-        },
-
-        move: function(event) {
-          console.log("move printed")
-          // Continuously return touch position.
-          this.touchmovex =  event.originalEvent.touches[0].pageX;
-          // Calculate distance to translate holder.
-          this.movex = this.index*this.slideWidth + (this.touchstartx - this.touchmovex);
-          // Defines the speed the images should move at.
-          var panx = 100-this.movex/6;
-          if (this.movex < 600) { // Makes the holder stop moving when there is no more content.
-            this.el.holder.css('transform','translate3d(-' + this.movex + 'px,0,0)');
-          }
-          if (panx < 100) { // Corrects an edge-case problem where the background image moves without the container moving.
-            this.el.imgSlide.css('transform','translate3d(-' + panx + 'px,0,0)');
-          }
-        },
-
-        end: function(event) {
-          console.log("end printed")
-          // Calculate the distance swiped.
-          var absMove = Math.abs(this.index*this.slideWidth - this.movex);
-          // Calculate the index. All other calculations are based on the index.
-          if (absMove > this.slideWidth/2 || this.longTouch === false) {
-            if (this.movex > this.index*this.slideWidth && this.index < 2) {
-              this.index++;
-            } else if (this.movex < this.index*this.slideWidth && this.index > 0) {
-              this.index--;
-            }
-          }      
-          // Move and animate the elements.
-          this.el.holder.addClass('animate').css('transform', 'translate3d(-' + this.index*this.slideWidth + 'px,0,0)');
-          this.el.imgSlide.addClass('animate').css('transform', 'translate3d(-' + 100-this.index*50 + 'px,0,0)');
-        }
-      };
-      div.init();
-    }
-  </script>
+	<nav>
+		<div id="navigation_bar">
+			<table>
+			  <tr>
+			    <td>
+			    	<i class="material-icons">menu</i>
+			    </td>
+			    <td>
+			    	<p id = "nav_title">Messages</p>
+			    </td>
+			  </tr>
+			</table>
+		</div>
+	</nav>
+	<div id ="messages">
+		<div id = "11"class = "notification_card">
+			<table>
+			  <tr>
+			    <td>
+			    	<div class = "image_border">
+			    		<img class = "profile_image" src="https://data.whicdn.com/images/109494492/original.jpg">
+			    	</div>
+			    </td>
+			    <td>
+			    	<div class = "content_section">
+				    	<p class = "author_name"> Henry</p>
+				    	<p class = "date"> 17 may 2017</p>
+			    	</div>
+			    </td>
+			  </tr>
+			</table>
+			<p class = "author_content"> Hello my name is Henry, hope you are doing fine!Hello my name is Henry, hope you are doing fine!Hello my name is Henry, hope you are doing fine!Hello my name is Henry, hope you are doing fine!</p>
+		</div>
+		<div class = "notification_card">
+			<table>
+			  <tr>
+			    <td>
+			    	<div class = "image_border">
+			    		<img class = "profile_image" src="https://data.whicdn.com/images/109494492/original.jpg">
+			    	</div>
+			    </td>
+			    <td>
+			    	<div class = "content_section">
+				    	<p class = "author_name"> Henry</p>
+				    	<p class = "date"> 17 may 2017</p>
+			    	</div>
+			    </td>
+			  </tr>
+			</table>
+			<p class = "author_content"> Hello my name is Henry, hope you are doing fine!Hello my name is Henry, hope you are doing fine!Hello my name is Henry, hope you are doing fine!Hello my name is Henry, hope you are doing fine!</p>
+		</div>
+	</div>
+<script src="script.js"></script>
 </body>
 </html>
+
+

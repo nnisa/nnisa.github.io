@@ -6,7 +6,7 @@ var first_load = "/messages";
 // window.onload = function() {
 //     document.getElementById('messages').className += " loaded";
 // }
-
+var 
 
 //loading JSON object based on the url, it loads the first object and changes the URL moving forward to new tokens
 function table(link){
@@ -61,11 +61,40 @@ function checkDate(inputDate){
 
 
 
+
+
+
+
+
+
+
+
+  update = function (container, from, to, isDown) {
+    // console.log('update');
+    if (isDown) {
+      remove(from);
+   container.append(create(message_object, to+1));
+    } else {
+      remove(to);
+      container.append(create(message_object, from-1));
+    }
+  };
+
+
+
+
+  remove = function (id) {
+    $(id).remove();
+  },
+
+
+
 //creating individual messages based on JSON object 
-function create_new_messages(message_object){
+function create(message_object, id){
   page_token =  "/messages?pageToken=" + message_object.pageToken;
   var count = message_object.count;
-  for(var i=0; i < count; i++) {
+  var i = id;
+
     //fetching all the important data required to create a message
     var profile_image_url = "http://message-list.appspot.com/" + message_object.messages[i].author.photoUrl;
     var author_name = message_object.messages[i].author.name;
@@ -109,6 +138,37 @@ if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
     }
 };
 
+
+
+//Swipe gesture 
+
+window.addEventListener('load', function(){
+ 
+    var box2 = document.getElementById('11'),
+    boxright,
+    boxleft, // left position of moving box
+    startx, // starting x coordinate of touch point
+    dist = 0, // distance traveled by touch point
+    touchobj = null // Touch object holder
+ 
+    box2.addEventListener('touchstart', function(e){
+        touchobj = e.changedTouches[0] // reference first touch point
+        boxleft = parseInt(box2.style.left) // get left position of box
+        startx = parseInt(touchobj.clientX) // get x coord of touch point
+        e.preventDefault() // prevent default click behavior
+    }, false)
+ 
+    box2.addEventListener('touchmove', function(e){
+        touchobj = e.changedTouches[0] // reference first touch point for this event
+        var dist = parseInt(touchobj.clientX) - startx // calculate dist traveled by touch point
+        // move box according to starting pos plus dist
+        // with lower limit 0 and upper limit 380 so it doesn't move outside track:
+        box2.style.left = ( (boxleft + dist > 380)? 380 : (boxleft + dist < 0)? 0 : boxleft + dist ) + 'px'
+        e.preventDefault()
+    }, false)
+ 
+}, false)
+ 
 
 
 

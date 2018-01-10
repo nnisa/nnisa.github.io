@@ -185,6 +185,8 @@ $("#messages").on("touchend", function(e) {
 
     });
 
+
+
   function swipedir(direction){
     if (direction === 'left'){
       console.log("Left Swipe")

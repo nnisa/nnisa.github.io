@@ -117,7 +117,8 @@ dist = 0,
 startY,// distance traveled by touch point
 threshold = ((document.getElementById('messages')).offsetWidth)/3,
 longTouch = false,
-allowedTime = 200, // maximum time allowed to travel that distance
+allowedTime = 200,
+restraint = 100, 
 elapsedTime,
 startTime
 

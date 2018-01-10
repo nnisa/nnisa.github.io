@@ -76,7 +76,7 @@ function create_new_messages(message_object){
     var id = message_object.messages[i].id;
     var messages_section = document.getElementById('messages')
 
-    $(`<div id = ${id} onClick ="reply_click(this.id)" class = "notification_card">`+
+    $(`<div id = ${id} class = "notification_card">`+
         `<table>`+
           `<tr>`+
             `<td>`+
@@ -109,14 +109,61 @@ if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
     }
 };
 
+//SWIPE FUNCTION
+var id,
+card, // left position of moving box
+startx, // starting x coordinate of touch point
+dist = 0, // distance traveled by touch point
+touchobj = null // Touch object holder
 
-function reply_click(clicked_id){
-    alert(clicked_id);
-    console.log("running")
-}
+$("#messages").on("touchstart", function(e) {
+      e.preventDefault();
+      id = $(e.target.closest(".notification_card")).attr('id');
+      console.log(id);
+      
+      card = document.getElementById(id),
+
+      touchobj = e.changedTouches[0] // reference first touch point
+      startx = parseInt(touchobj.clientX) // get x coord of touch point
+      e.preventDefault() // prevent default click behavior
+    });
 
 
+$("#messages").on("touchmove", function(e) {
+      e.preventDefault();
+      var id = $(e.target.closest(".notification_card")).attr('id');
+      
+      touchobj = e.changedTouches[0] // reference first touch point for this event
+      dist = parseInt(touchobj.clientX) - startx // calculate dist traveled by touch point
+      // move box according to starting pos plus dist
 
+      card.style.left = dist + 'px';
+      e.preventDefault()
+    });
+
+// $("#messages").on("touchend", function(e) {
+//       e.preventDefault();
+
+//       touchobj = e.changedTouches[0] // reference first touch point for this event
+//       var dist = parseInt(touchobj.clientX) - startx // calculate dist traveled by touch point
+//       // move box according to starting pos plus dist
+//       // with lower limit 0 and upper limit 380 so it doesn't move outside track:
+
+//       var slideWidth = $('#track').width();
+//       var threshold = slideWidth/3;
+
+
+//       if (dist < threshold && dist < 0 ){
+//           console.log('swipe right')
+//           box2.style.left = '140%';
+//       } else if (dist > threshold){
+//           console.log('swipe left')
+//           box2.style.left = '-140%';
+//       } else {
+//           box2.style.left = '0px';
+//       }  
+
+//     });
 
 
 

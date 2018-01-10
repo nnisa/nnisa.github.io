@@ -141,17 +141,17 @@ $("#messages").on("touchmove", function(e) {
       distX = touchobj.pageX - startX // get horizontal dist traveled by finger while in contact with surface
       distY = touchobj.pageY - startY // get vertical dist traveled by finger while in contact with surface
       
-      // if (distX > 0 && distY < distX){
-      //   touchobj = e.changedTouches[0] // reference first touch point for this event
-      //   dist = parseInt(touchobj.clientX) - startX // calculate dist traveled by touch point
-      //   // move box according to starting pos plus dist
-      //   e.preventDefault();
-      //   card.style.left = dist + 'px';
-      //   e.preventDefault()
-      //   console.log("swipe")
-      // } else {
-      //   console.log("scroll")
-      // }
+      if (Math.abs(distX) > 0 && Math.abs(distY)  < Math.abs(distX) ){
+        touchobj = e.changedTouches[0] // reference first touch point for this event
+        dist = parseInt(touchobj.clientX) - startX // calculate dist traveled by touch point
+        // move box according to starting pos plus dist
+        e.preventDefault();
+        card.style.left = dist + 'px';
+        e.preventDefault()
+        console.log("swipe")
+      } else {
+        console.log("scroll")
+      }
     });
 
 $("#messages").on("touchend", function(e) {
@@ -180,7 +180,6 @@ $("#messages").on("touchend", function(e) {
               }
           }
       }
-
       e.preventDefault()
 
     });

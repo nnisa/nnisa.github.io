@@ -42,8 +42,9 @@ div#navigation_bar {
 div#messages {
     padding-top: 23%;
     overflow-y:auto;
-    position: relative;
+    /*position: fixed;*/
     width: 100%;
+    overflow-x: hidden;
 }
 
 .newDiv{
@@ -106,5 +107,5 @@ p#nav_title{
 }
 
 .animate {
-  transition: transform 0.3s ease-out;
+  transition: transform 0.5s ease-out;
 }

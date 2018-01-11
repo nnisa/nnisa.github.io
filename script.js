@@ -198,7 +198,7 @@ $("#messages").on("touchend", function(e) {
       elapsedTime = new Date().getTime() - startTime // get time elapsed
 
 
-       if (elapsedTime <= allowedTime){ // first condition for awipe met
+       // if (elapsedTime <= allowedTime){ // first condition for awipe met
           if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){ // 2nd condition for horizontal swipe met
               if (distX < 0){
                 swipedir('left', distX)
@@ -207,14 +207,14 @@ $("#messages").on("touchend", function(e) {
               }
               e.preventDefault()
 
-          }
-        }
-          else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){ // 2nd condition for vertical swipe met
+          }else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){ // 2nd condition for vertical swipe met
               if (distY < 0){
                 swipedir('up')
               } else {
                 swipedir('down')
               }
+          } else {
+            card.style.marginLeft = '0 auto';
           }
         move_distY = 0
         move_distX = 0
@@ -226,12 +226,12 @@ $("#messages").on("touchend", function(e) {
     if (direction === 'left'){
       console.log("Left Swipe")
       card.className += " animate";
-      card.style.transform = 'translate3d(' + width + 'px,0,0)';
+      card.style.transform = 'translate3d(-' + width + 'px,0,0)';
 
     } else if (direction === 'right'){
       console.log("right Swipe")
       card.className += " animate";
-      card.style.transform = 'translate3d(-' + width + 'px,0,0)';
+      card.style.transform = 'translate3d(' + width + 'px,0,0)';
     } else if (direction === 'up'){
       $(window).scroll();
       console.log("Scroll up")

@@ -219,20 +219,23 @@ $("#messages").on("touchend", function(e) {
     });
 
 
-
   function swipedir(direction, dist){
     if (direction === 'left'){
       console.log("Left Swipe")
-      card.style.transition = 'all .75s ease-out';
+      card.style.transition = 'all .35s ease-out';
       card.style.marginLeft = '-'+ width +'px';
       // $('#'+ id).remove();
       deleted_cards+=1
       load_more (deleted_cards)
+
+      var card_height = document.getElementById(id).offsetHeight;
+      console.log(card_height);
+
       setTimeout(function(){
         card.style.transition = 'all .75s ease-out';
         card.style.height = '0px';
         card.style.paddingTop = '0px';
-       }, 500);
+       }, 750);
       setTimeout(function(){
         $('#'+ id).remove();
        }, 1000);
@@ -248,7 +251,7 @@ $("#messages").on("touchend", function(e) {
         card.style.transition = 'all .75s ease-out';
         card.style.height = '0px';
         card.style.paddingTop = '0px';
-       }, 500);
+       }, 750);
       setTimeout(function(){
         $('#'+ id).remove();
        }, 1000);

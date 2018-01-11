@@ -109,6 +109,30 @@ p#nav_title{
 
 
 
+/*###Desktops, big landscape tablets and laptops(Large, Extra large)####*/
+@media screen and (min-width: 1024px){
+	div#messages {
+    	padding-top: 10%;
+	}
+}
+
+/*###Tablet(medium)###*/
+@media screen and (min-width : 768px) and (max-width : 1023px){
+	div#messages {
+    	padding-top: 13%;
+	}
+}
+
+/*### Smartphones (portrait and landscape)(small)### */
+@media screen and (min-width : 0px) and (max-width : 767px){
+	div#messages {
+    	padding-top: 23%;
+	}
+
+}
+
+
+
 
 
 

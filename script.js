@@ -126,7 +126,8 @@ card, // left position of moving box
 startX, // starting x coordinate of touch point
 dist = 0, 
 startY,// distance traveled by touch point
-width = (document.getElementById('messages')).offsetWidth,
+messages = document.getElementById('messages'),
+width = messages.offsetWidth,
 threshold = (width)/3,
 longTouch = false,
 allowedTime = 200,
@@ -235,6 +236,13 @@ $("#messages").on("touchend", function(e) {
       // $('#'+ id).remove();
       deleted_cards+=1
       load_more (deleted_cards)
+      setTimeout(function(){
+        card.style.transition = 'all .75s ease-out';
+        card.style.marginTop = '0px'
+       }, 500);
+      setTimeout(function(){
+        $('#'+ id).remove();
+       }, 1000);
 
 
     } else if (direction === 'up'){

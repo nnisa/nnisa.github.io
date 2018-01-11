@@ -182,7 +182,7 @@ $("#messages").on("touchmove", function(e) {
     e.stopPropagation();
     console.log("swipe")
   } else {
-    console.log("scroll", Math.abs(move_distX), Math.abs(move_distY))
+    console.log("scroll", "X " + Math.abs(move_distX), "Y " + Math.abs(move_distY))
     $(window).scroll();
     scrolling_end = false;
   }

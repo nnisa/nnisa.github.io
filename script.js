@@ -222,20 +222,20 @@ $("#messages").on("touchend", function(e) {
   function swipedir(direction, dist){
     if (direction === 'left'){
       console.log("Left Swipe")
-      card.className += " animate";
-      card.style.transform = 'translate3d(-' + width + 'px,0,0)';
-      $('#'+ id).remove();
+      card.style.transition = 'all .75s ease-out';
+      card.style.marginLeft = '-'+ width +10 +'px';
+      // $('#'+ id).remove();
       deleted_cards+=1
       load_more (deleted_cards)
-      console.log(deleted_cards)
+
     } else if (direction === 'right'){
       console.log("right Swipe")
-      card.className += " animate";
-      card.style.transform = 'translate3d(' + width + 'px,0,0)';
-      $('#'+ id).remove();
+      card.style.transition = 'all .75s ease-out';
+      card.style.marginLeft = width + 10 +'px';
+      // $('#'+ id).remove();
       deleted_cards+=1
       load_more (deleted_cards)
-      console.log(deleted_cards)
+
 
     } else if (direction === 'up'){
       $(window).scroll();

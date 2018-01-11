@@ -1,7 +1,7 @@
 const api = "https://message-list.appspot.com";
 var page_token;
 var first_load = "/messages";
-
+var last_id = 0;
 
 // window.onload = function() {
 //     document.getElementById('messages').className += " loaded";
@@ -73,10 +73,10 @@ function create_new_messages(message_object){
     var date_time = message_object.messages[i].updated;
     var received = checkDate(date_time)
     // console.log(date_time);
-    var id = message_object.messages[i].id;
+    last_id = (last_id + 1)
     var messages_section = document.getElementById('messages')
 
-    $(`<div id = ${id} class = "notification_card">`+
+    $(`<div id = ${last_id} class = "notification_card">`+
         `<table>`+
           `<tr>`+
             `<td>`+
@@ -99,7 +99,7 @@ function create_new_messages(message_object){
 
 
 //Printing out the first load of messages 
-table(first_load);
+table(first_load, 1);
 
 
 //On scroll we will change the token value and add new messages to the list
@@ -139,10 +139,11 @@ elapsedTime,
 startTime,
 scrolling_end = false,
 move_distY,
-move_distY
+move_distX
 
 $(window).scrollEnd(function(){
-
+          move_distY = 0
+        move_distX = 0
     scrolling_end = true;
 }, 900);
 
@@ -154,10 +155,9 @@ $("#messages").on("touchstart", function(e) {
       id = $(e.target.closest(".notification_card")).attr('id');
       
       card = document.getElementById(id)
-      move_distY = 0
-      move_distY = 0
+
       startTime = new Date().getTime()
-      var touchobj = e.changedTouches[0] // reference first touch point
+      var touchobj = e.touches[0] // reference first touch point
       startX = parseInt(touchobj.clientX)
       startY = parseInt(touchobj.clientY) // get Y coord of touch point
       // e.preventDefault() // prevent default click behavior
@@ -167,14 +167,13 @@ $("#messages").on("touchstart", function(e) {
 
 $("#messages").on("touchmove", function(e) {
   console.log("touchmove initiated")
-  // console.log(id);
-
-  var touchobj = e.changedTouches[0]
-  move_distX = touchobj.pageX - startX // get horizontal dist traveled by finger while in contact with surface
-  move_distY = touchobj.pageY - startY // get vertical dist traveled by finger while in contact with surface
+  console.log(id);
+  var touchobj = e.touches[0]
+  move_distX = e.touches[0].clientX - startX// get horizontal dist traveled by finger while in contact with surface
+  move_distY = e.touches[0].clientY - startY// get vertical dist traveled by finger while in contact with surface
   
   if (Math.abs(move_distX) > 0 && Math.abs(move_distY)  < Math.abs(move_distX) ){
-    touchobj = e.changedTouches[0] // reference first touch point for this event
+    touchobj = e.touches[0] // reference first touch point for this event
     dist = parseInt(touchobj.clientX) - startX // calculate dist traveled by touch point
     // move box according to starting pos plus dist
     card.style.marginLeft = dist + 'px';
@@ -193,13 +192,13 @@ $("#messages").on("touchend", function(e) {
       e.preventDefault();
 
       var touchobj = e.changedTouches[0]
-      distX = touchobj.pageX - startX // get horizontal dist traveled by finger while in contact with surface
-      distY = touchobj.pageY - startY // get vertical dist traveled by finger while in contact with surface
+      distX = touchobj.clientX - startX // get horizontal dist traveled by finger while in contact with surface
+      distY = touchobj.clientY - startY // get vertical dist traveled by finger while in contact with surface
 
       elapsedTime = new Date().getTime() - startTime // get time elapsed
 
 
-      // if (elapsedTime <= allowedTime){ // first condition for awipe met
+       if (elapsedTime <= allowedTime){ // first condition for awipe met
           if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){ // 2nd condition for horizontal swipe met
               if (distX < 0){
                 swipedir('left', distX)
@@ -209,6 +208,7 @@ $("#messages").on("touchend", function(e) {
               e.preventDefault()
 
           }
+        }
           else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){ // 2nd condition for vertical swipe met
               if (distY < 0){
                 swipedir('up')
@@ -216,7 +216,8 @@ $("#messages").on("touchend", function(e) {
                 swipedir('down')
               }
           }
-      // }
+        move_distY = 0
+        move_distX = 0
     });
 
 
@@ -224,10 +225,12 @@ $("#messages").on("touchend", function(e) {
   function swipedir(direction, dist){
     if (direction === 'left'){
       console.log("Left Swipe")
+      card.className += " animate";
       card.style.transform = 'translate3d(' + width + 'px,0,0)';
 
     } else if (direction === 'right'){
       console.log("right Swipe")
+      card.className += " animate";
       card.style.transform = 'translate3d(-' + width + 'px,0,0)';
     } else if (direction === 'up'){
       $(window).scroll();

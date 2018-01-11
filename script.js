@@ -238,7 +238,8 @@ $("#messages").on("touchend", function(e) {
       load_more (deleted_cards)
       setTimeout(function(){
         card.style.transition = 'all .75s ease-out';
-        card.style.marginTop = '0px'
+        card.style.height = '0px';
+        card.style.paddingTop = '0px';
        }, 500);
       setTimeout(function(){
         $('#'+ id).remove();

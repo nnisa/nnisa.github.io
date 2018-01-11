@@ -208,7 +208,8 @@ $("#messages").on("touchend", function(e) {
             swipedir('down')
           }
       } else {
-        card.style.marginLeft = '0 auto';
+        console.log("go back")
+        card.style.margin = '0 auto';
       }
     move_distY = 0
     move_distX = 0
@@ -228,7 +229,7 @@ $("#messages").on("touchend", function(e) {
       card.className += " animate";
       card.style.transform = 'translate3d(' + width + 'px,0,0)';
       $('#'+ id).remove();
-      
+
     } else if (direction === 'up'){
       $(window).scroll();
       console.log("Scroll up")

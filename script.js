@@ -222,7 +222,7 @@ $("#messages").on("touchend", function(e) {
   function swipedir(direction, dist){
     if (direction === 'left'){
       console.log("Left Swipe")
-      card.style.transition = 'all .35s ease-out';
+      card.style.transition = 'all .5s ease-out';
       card.style.marginLeft = '-'+ width +'px';
       // $('#'+ id).remove();
       deleted_cards+=1
@@ -232,26 +232,26 @@ $("#messages").on("touchend", function(e) {
       console.log(card_height);
 
       setTimeout(function(){
-        card.style.transition = 'all .75s ease-out';
+        card.style.transition = 'all .5s ease-out';
         card.style.height = '0px';
         card.style.paddingTop = '0px';
-       }, 750);
+       }, 600);
       setTimeout(function(){
         $('#'+ id).remove();
        }, 1000);
 
     } else if (direction === 'right'){
       console.log("right Swipe")
-      card.style.transition = 'all .75s ease-out';
+      card.style.transition = 'all .5s ease-out';
       card.style.marginLeft = parseInt(width)+10 +'px';
       // $('#'+ id).remove();
       deleted_cards+=1
       load_more (deleted_cards)
       setTimeout(function(){
-        card.style.transition = 'all .75s ease-out';
+        card.style.transition = 'all .5s ease-out';
         card.style.height = '0px';
         card.style.paddingTop = '0px';
-       }, 750);
+       }, 600);
       setTimeout(function(){
         $('#'+ id).remove();
        }, 1000);

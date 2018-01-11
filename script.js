@@ -109,26 +109,53 @@ if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
     }
 };
 
+
+$.fn.scrollEnd = function(callback, timeout) {          
+  $(this).scroll(function(){
+    var $this = $(this);
+    if ($this.data('scrollTimeout')) {
+      clearTimeout($this.data('scrollTimeout'));
+    }
+    $this.data('scrollTimeout', setTimeout(callback,timeout));
+  });
+};
+
+
+
+
+
 //SWIPE FUNCTION
 var id,
 card, // left position of moving box
 startX, // starting x coordinate of touch point
 dist = 0, 
 startY,// distance traveled by touch point
-threshold = ((document.getElementById('messages')).offsetWidth)/3,
+width = (document.getElementById('messages')).offsetWidth,
+threshold = (width)/3,
 longTouch = false,
 allowedTime = 200,
 restraint = 100, 
 elapsedTime,
-startTime
+startTime,
+scrolling_end = false,
+move_distY,
+move_distY
+
+$(window).scrollEnd(function(){
+
+    scrolling_end = true;
+}, 900);
+
 
 
 $("#messages").on("touchstart", function(e) {
+  console.log("touchstart initiated")
       // e.preventDefault();
-      var id = $(e.target.closest(".notification_card")).attr('id');
-      console.log(id);
+      id = $(e.target.closest(".notification_card")).attr('id');
+      
       card = document.getElementById(id)
-
+      move_distY = 0
+      move_distY = 0
       startTime = new Date().getTime()
       var touchobj = e.changedTouches[0] // reference first touch point
       startX = parseInt(touchobj.clientX)
@@ -137,26 +164,32 @@ $("#messages").on("touchstart", function(e) {
     });
 
 
+
 $("#messages").on("touchmove", function(e) {
-      var touchobj = e.changedTouches[0]
-      distX = touchobj.pageX - startX // get horizontal dist traveled by finger while in contact with surface
-      distY = touchobj.pageY - startY // get vertical dist traveled by finger while in contact with surface
-      
-      if (Math.abs(distX) > 0 && Math.abs(distY)  < Math.abs(distX) ){
-        touchobj = e.changedTouches[0] // reference first touch point for this event
-        dist = parseInt(touchobj.clientX) - startX // calculate dist traveled by touch point
-        // move box according to starting pos plus dist
-        e.preventDefault();
-        card.style.left = dist + 'px';
-        // e.preventDefault()
-        console.log("swipe")
-      } else {
-        console.log("scroll")
-        $(window).scroll();
-      }
-    });
+  console.log("touchmove initiated")
+  // console.log(id);
+
+  var touchobj = e.changedTouches[0]
+  move_distX = touchobj.pageX - startX // get horizontal dist traveled by finger while in contact with surface
+  move_distY = touchobj.pageY - startY // get vertical dist traveled by finger while in contact with surface
+  
+  if (Math.abs(move_distX) > 0 && Math.abs(move_distY)  < Math.abs(move_distX) ){
+    touchobj = e.changedTouches[0] // reference first touch point for this event
+    dist = parseInt(touchobj.clientX) - startX // calculate dist traveled by touch point
+    // move box according to starting pos plus dist
+    card.style.marginLeft = dist + 'px';
+    e.preventDefault()
+    e.stopPropagation();
+    console.log("swipe")
+  } else {
+    console.log("scroll", Math.abs(move_distX), Math.abs(move_distY))
+    $(window).scroll();
+    scrolling_end = false;
+  }
+});
 
 $("#messages").on("touchend", function(e) {
+  console.log("touchend initiated")
       e.preventDefault();
 
       var touchobj = e.changedTouches[0]
@@ -166,12 +199,12 @@ $("#messages").on("touchend", function(e) {
       elapsedTime = new Date().getTime() - startTime // get time elapsed
 
 
-      if (elapsedTime <= allowedTime){ // first condition for awipe met
+      // if (elapsedTime <= allowedTime){ // first condition for awipe met
           if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){ // 2nd condition for horizontal swipe met
               if (distX < 0){
-                swipedir('left')
+                swipedir('left', distX)
               } else {
-                swipedir('right')
+                swipedir('right', distX)
               }
               e.preventDefault()
 
@@ -183,16 +216,19 @@ $("#messages").on("touchend", function(e) {
                 swipedir('down')
               }
           }
-      }
+      // }
     });
 
 
 
-  function swipedir(direction){
+  function swipedir(direction, dist){
     if (direction === 'left'){
       console.log("Left Swipe")
+      card.style.transform = 'translate3d(' + width + 'px,0,0)';
+
     } else if (direction === 'right'){
       console.log("right Swipe")
+      card.style.transform = 'translate3d(-' + width + 'px,0,0)';
     } else if (direction === 'up'){
       $(window).scroll();
       console.log("Scroll up")
@@ -205,10 +241,27 @@ $("#messages").on("touchend", function(e) {
 
 
 
+  // card.animate({
+  //   marginLeft: parseInt(card.css('marginLeft'),10) == 0 ?
+  //     $marginLefty.outerWidth() :
+  //     0
+  // });
 
 
 
+//    card.animate({
+//     padding: "0px",
+//        'margin-left':'-10px',
+//     'font-size': "0px"
+//   }, 500, function() {
+        
+//       $(this).remove();      
+//   });
+// });
 
+//   card.slideLeft(function() {
+//     $(this).remove();
+//   });
 
 
 

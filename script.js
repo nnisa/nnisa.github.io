@@ -99,10 +99,11 @@ table(first_load);
 
 //On scroll we will change the token value and add new messages to the list
 window.onscroll = function(ev) {
-if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight*(0.8)) {
     table(page_token);
     }
 };
+
 
 
 $.fn.scrollEnd = function(callback, timeout) {          
@@ -119,6 +120,7 @@ $.fn.scrollEnd = function(callback, timeout) {
 
 
 //SWIPE FUNCTION
+var deleted_cards = 0;
 var id,
 card, // left position of moving box
 startX, // starting x coordinate of touch point
@@ -223,12 +225,17 @@ $("#messages").on("touchend", function(e) {
       card.className += " animate";
       card.style.transform = 'translate3d(-' + width + 'px,0,0)';
       $('#'+ id).remove();
-
+      deleted_cards+=1
+      load_more (deleted_cards)
+      console.log(deleted_cards)
     } else if (direction === 'right'){
       console.log("right Swipe")
       card.className += " animate";
       card.style.transform = 'translate3d(' + width + 'px,0,0)';
       $('#'+ id).remove();
+      deleted_cards+=1
+      load_more (deleted_cards)
+      console.log(deleted_cards)
 
     } else if (direction === 'up'){
       $(window).scroll();
@@ -240,6 +247,16 @@ $("#messages").on("touchend", function(e) {
   }
 
 
+function load_more (deleted_cards){
+  var no_notification_card = document.getElementById("messages").childElementCount;
+  var remaining_cards = no_notification_card - deleted_cards
+  console.log(remaining_cards)
+  if (remaining_cards < 5){
+    table(page_token);
+  } else {
+    console.log("Its okay")
+  }
+}
 
 
   // card.animate({

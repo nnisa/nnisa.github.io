@@ -223,7 +223,7 @@ $("#messages").on("touchend", function(e) {
     if (direction === 'left'){
       console.log("Left Swipe")
       card.style.transition = 'all .75s ease-out';
-      card.style.marginLeft = '-'+ width +10 +'px';
+      card.style.marginLeft = '-'+ width +'px';
       // $('#'+ id).remove();
       deleted_cards+=1
       load_more (deleted_cards)
@@ -231,7 +231,7 @@ $("#messages").on("touchend", function(e) {
     } else if (direction === 'right'){
       console.log("right Swipe")
       card.style.transition = 'all .75s ease-out';
-      card.style.marginLeft = width + 10 +'px';
+      card.style.marginLeft = parseInt(width)+10 +'px';
       // $('#'+ id).remove();
       deleted_cards+=1
       load_more (deleted_cards)

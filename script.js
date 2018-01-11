@@ -106,22 +106,9 @@ if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight*(0.8)) {
 
 
 
-$.fn.scrollEnd = function(callback, timeout) {          
-  $(this).scroll(function(){
-    var $this = $(this);
-    if ($this.data('scrollTimeout')) {
-      clearTimeout($this.data('scrollTimeout'));
-    }
-    $this.data('scrollTimeout', setTimeout(callback,timeout));
-  });
-};
-
-
-
-
 //SWIPE FUNCTION
-var deleted_cards = 0;
-var id,
+var deleted_cards = 0,
+id,
 card, // left position of moving box
 startX, // starting x coordinate of touch point
 dist = 0, 
@@ -137,13 +124,6 @@ startTime,
 scrolling_end = false,
 move_distY,
 move_distX
-
-$(window).scrollEnd(function(){
-  move_distY = 0
-  move_distX = 0
-  scrolling_end = true;
-}, 900);
-
 
 
 $("#messages").on("touchstart", function(e) {

@@ -113,7 +113,12 @@ p#nav_title{
 }
 
   
+.animate_mid {
+	margin-right: auto;
+	margin-left: auto;
+	transition: all 0.3s ease-in;
 
+}
 
 
 

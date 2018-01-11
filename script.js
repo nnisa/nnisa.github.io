@@ -138,9 +138,9 @@ move_distY,
 move_distX
 
 $(window).scrollEnd(function(){
-          move_distY = 0
-        move_distX = 0
-    scrolling_end = true;
+  move_distY = 0
+  move_distX = 0
+  scrolling_end = true;
 }, 900);
 
 
@@ -253,55 +253,5 @@ function load_more (deleted_cards){
   console.log(remaining_cards)
   if (remaining_cards < 5){
     table(page_token);
-  } else {
-    console.log("Its okay")
   }
 }
-
-
-  // card.animate({
-  //   marginLeft: parseInt(card.css('marginLeft'),10) == 0 ?
-  //     $marginLefty.outerWidth() :
-  //     0
-  // });
-
-
-
-//    card.animate({
-//     padding: "0px",
-//        'margin-left':'-10px',
-//     'font-size': "0px"
-//   }, 500, function() {
-        
-//       $(this).remove();      
-//   });
-// });
-
-//   card.slideLeft(function() {
-//     $(this).remove();
-//   });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

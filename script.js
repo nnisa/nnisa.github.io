@@ -3,11 +3,6 @@ var page_token;
 var first_load = "/messages";
 var last_id = 0;
 
-// window.onload = function() {
-//     document.getElementById('messages').className += " loaded";
-// }
-
-
 //loading JSON object based on the url, it loads the first object and changes the URL moving forward to new tokens
 function table(link){
     $.getJSON(api + link, function(message_object){
@@ -99,7 +94,7 @@ function create_new_messages(message_object){
 
 
 //Printing out the first load of messages 
-table(first_load, 1);
+table(first_load);
 
 
 //On scroll we will change the token value and add new messages to the list
@@ -119,7 +114,6 @@ $.fn.scrollEnd = function(callback, timeout) {
     $this.data('scrollTimeout', setTimeout(callback,timeout));
   });
 };
-
 
 
 
@@ -187,6 +181,8 @@ $("#messages").on("touchmove", function(e) {
   }
 });
 
+
+
 $("#messages").on("touchend", function(e) {
   console.log("touchend initiated")
       e.preventDefault();
@@ -197,27 +193,25 @@ $("#messages").on("touchend", function(e) {
 
       elapsedTime = new Date().getTime() - startTime // get time elapsed
 
-
-       // if (elapsedTime <= allowedTime){ // first condition for awipe met
-          if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){ // 2nd condition for horizontal swipe met
-              if (distX < 0){
-                swipedir('left', distX)
-              } else {
-                swipedir('right', distX)
-              }
-              e.preventDefault()
-
-          }else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){ // 2nd condition for vertical swipe met
-              if (distY < 0){
-                swipedir('up')
-              } else {
-                swipedir('down')
-              }
+      if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){ // 2nd condition for horizontal swipe met
+          if (distX < 0){
+            swipedir('left', distX)
           } else {
-            card.style.marginLeft = '0 auto';
+            swipedir('right', distX)
           }
-        move_distY = 0
-        move_distX = 0
+          e.preventDefault()
+
+      }else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){ // 2nd condition for vertical swipe met
+          if (distY < 0){
+            swipedir('up')
+          } else {
+            swipedir('down')
+          }
+      } else {
+        card.style.marginLeft = '0 auto';
+      }
+    move_distY = 0
+    move_distX = 0
     });
 
 
@@ -227,11 +221,14 @@ $("#messages").on("touchend", function(e) {
       console.log("Left Swipe")
       card.className += " animate";
       card.style.transform = 'translate3d(-' + width + 'px,0,0)';
+      $('#'+ id).remove();
 
     } else if (direction === 'right'){
       console.log("right Swipe")
       card.className += " animate";
       card.style.transform = 'translate3d(' + width + 'px,0,0)';
+      $('#'+ id).remove();
+      
     } else if (direction === 'up'){
       $(window).scroll();
       console.log("Scroll up")

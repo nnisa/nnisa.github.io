@@ -108,4 +108,12 @@ p#nav_title{
 
 .animate {
   transition: transform 0.5s ease-out;
+  opacity: 0;
+  display: none;
 }
+
+  
+
+
+
+

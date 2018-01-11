@@ -228,6 +228,14 @@ $("#messages").on("touchend", function(e) {
       // $('#'+ id).remove();
       deleted_cards+=1
       load_more (deleted_cards)
+      setTimeout(function(){
+        card.style.transition = 'all .75s ease-out';
+        card.style.height = '0px';
+        card.style.paddingTop = '0px';
+       }, 500);
+      setTimeout(function(){
+        $('#'+ id).remove();
+       }, 1000);
 
     } else if (direction === 'right'){
       console.log("right Swipe")
@@ -244,7 +252,6 @@ $("#messages").on("touchend", function(e) {
       setTimeout(function(){
         $('#'+ id).remove();
        }, 1000);
-
 
     } else if (direction === 'up'){
       $(window).scroll();
